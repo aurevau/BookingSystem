@@ -32,6 +32,16 @@ class LoginViewModel {
         }
     }
     
+    func logOut() {
+        errorMessage = ""
+        do {
+            try repo.logOut()
+        } catch {
+            errorMessage = "Failed to logout"
+        }
+       
+    }
+    
     private func validate() -> Bool {
         errorMessage = ""
         
@@ -48,5 +58,11 @@ class LoginViewModel {
         return true
         
     }
+    
+    var isSignedIn: Bool {
+        return repo.isSignedIn
+    }
+    
+    
     
 }
