@@ -20,4 +20,8 @@ class AuthRepository {
     func logOut() throws {
         try Auth.auth().signOut()
     }
+    
+    var isSignedIn: Bool {
+        return Auth.auth().currentUser != nil
+    }
 }
