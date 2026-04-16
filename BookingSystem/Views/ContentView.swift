@@ -9,13 +9,21 @@ import SwiftUI
 
 struct ContentView: View {
     
-    
+    @Environment(LoginViewModel.self) private var viewModel
     var body: some View {
-        VStack {
-           
+        if !viewModel.isSignedIn {
             LoginView()
+        } else {
+            VStack {
+                Text("Hej du lyckades logga in")
+                
+                Button("Logga ut") {
+                    viewModel.logOut()
+                }
+            }
+            .padding()
         }
-        .padding()
+       
     }
 }
 
