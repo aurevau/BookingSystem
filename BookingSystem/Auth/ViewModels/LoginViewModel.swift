@@ -24,6 +24,8 @@ class LoginViewModel {
         Task {
             do {
                 let result = try await repo.login(email: email, password: password)
+                let userId = result.user.uid
+                print("\(userId) is logged in")
             } catch {
                 errorMessage = error.localizedDescription
             }
