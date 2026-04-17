@@ -17,13 +17,13 @@ class AuthViewModel {
     var email = ""
     var password = ""
     var confirmPassword = ""
+    var accountNumber: Int = 0
     var errorMessage = ""
     
     var isLoading: Bool = false
-
-
     
     private let repo = AuthRepository()
+    private var userRepo = UserRepository()
     
     init() {
         loginState = repo.isSignedIn ? .loginSuccess : .notLoggedIn
@@ -93,7 +93,7 @@ class AuthViewModel {
             do {
                 let result = try await repo.register(email: email, password: password)
                 isLoading = false
-                clearRegisterFields()
+              
                 let userId = result.user.uid
                 registerState = .registerSuccess
                 
@@ -101,7 +101,10 @@ class AuthViewModel {
                 loginState = .loginSuccess
                 
                 print("\(userId) is registered to firebase ")
-                // save user to firestore
+                try await userRepo.saveUserToFirebase(accountNumber: accountNumber, email: email, name: name)
+                
+                clearRegisterFields()
+                
             } catch {
                 isLoading = false
                 errorMessage = error.localizedDescription

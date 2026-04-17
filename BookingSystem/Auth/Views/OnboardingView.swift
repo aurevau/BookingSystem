@@ -18,6 +18,8 @@ struct OnboardingView: View {
                     TextField("Username", text: $vm.name)
                         .autocorrectionDisabled()
                         .textFieldStyle(DefaultTextFieldStyle())
+                
+                TextField("Account Number", value: $vm.accountNumber, formatter: NumberFormatter() )
                     
                     TextField("Email", text: $vm.email)
                         .textFieldStyle(DefaultTextFieldStyle())
