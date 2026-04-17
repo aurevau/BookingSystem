@@ -10,7 +10,7 @@ import FirebaseAuth
 import Foundation
 
 @Observable
-class LoginViewModel {
+class AuthViewModel {
     var loginState: LoginState = .idle
     var registerState: RegisterState = .idle
     var name = ""
