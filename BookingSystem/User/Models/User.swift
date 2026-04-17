@@ -8,8 +8,9 @@
 import Foundation
 
 struct User: Identifiable, Codable {
-    var id = UUID().uuidString
+    var id : String
     let accountNumber: Int
+    let userRole: UserRole
     let name: String
     let email: String
     let joined: TimeInterval
