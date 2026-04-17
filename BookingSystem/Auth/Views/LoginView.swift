@@ -8,33 +8,38 @@
 import SwiftUI
 
 struct LoginView: View {
-    @State private var viewModel = LoginViewModel()
+    @Environment(AuthViewModel.self) private var viewModel
     
+
     var body: some View {
-        if viewModel.isSignedIn == true {
-            ContentView()
-                .environment(viewModel)
-        } else {
+        @Bindable var vm = viewModel
             NavigationStack {
                 VStack(spacing: 20){
                     
-                        TextField("Email", text: $viewModel.email)
+                        TextField("Email", text: $vm.email)
                             .textFieldStyle(DefaultTextFieldStyle())
                             .autocapitalization(.none)
-                        SecureField("Password", text: $viewModel.password)
+                        SecureField("Password", text: $vm.password)
                             .textFieldStyle(DefaultTextFieldStyle())
                         
                         if !viewModel.errorMessage.isEmpty {
                             Text(viewModel.errorMessage)
                                 .foregroundColor(.red)
                         }
+                    
+                    
                         
                         Button {
                             viewModel.login()
                                 
         
                         } label: {
-                            Text("Login")
+                            if viewModel.isLoading {
+                                    ProgressView()
+                            } else {
+                                Text("Login")
+                            }
+                        
                         }
                         
                         
@@ -43,6 +48,7 @@ struct LoginView: View {
                     NavigationLink("New around here? Register") {
                         OnboardingView()
                             .navigationBarBackButtonHidden(true)
+                            .environment(viewModel)
                     }
                 }
                 
@@ -51,8 +57,6 @@ struct LoginView: View {
                 .navigationTitle("Login")
                 
             }
-            .environment(viewModel)
-        }
     
     }
 }
