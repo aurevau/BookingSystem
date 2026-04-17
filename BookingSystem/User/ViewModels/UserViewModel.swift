@@ -6,8 +6,25 @@
 //
 
 import Observation
+import Foundation
 
 @Observable
 class UserViewModel {
+    private var userRepo = UserRepository()
+    var userRole: UserRole = .guest
+    var errorMessage = ""
     
+    init() {
+            checkRole()
+        }
+
+    func checkRole() {
+        Task {
+            do {
+                userRole = try await userRepo.getUserRole()
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+        }
+    }
 }
