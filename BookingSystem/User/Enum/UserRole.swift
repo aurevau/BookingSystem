@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+enum UserRole: String, Codable {
+    case guest = "Guest"
+    case admin = "Admin"
+    case user = "User"
+}
