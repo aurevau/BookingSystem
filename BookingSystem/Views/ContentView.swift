@@ -9,23 +9,26 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @Environment(LoginViewModel.self) private var viewModel
+    @State private var viewModel = AuthViewModel()
+
     var body: some View {
-        if !viewModel.isSignedIn {
-            LoginView()
-        } else {
-            VStack {
-                Text("Hej du lyckades logga in")
-                
-                Button("Logga ut") {
-                    viewModel.logOut()
-                }
+        VStack {
+            switch viewModel.loginState {
+            case .loginSuccess: MainView()
+            case .notLoggedIn : LoginView()
+            case .idle : ProgressView()
+            case .error(message: _):
+                Text("")
             }
-            .padding()
+        }
+        .environment(viewModel)
+        
+        
+            
         }
        
     }
-}
+
 
 #Preview {
     ContentView()
