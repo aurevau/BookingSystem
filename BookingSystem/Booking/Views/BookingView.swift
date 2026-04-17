@@ -51,7 +51,7 @@ struct BookingView: View {
                         
                         Spacer()
                         
-                        Text(viewModel.selectedDate.monthAndYear())
+                        Text(viewModel.selectedDate.monthYearFormat())
                             .font(.title2)
                         
                         Spacer()
