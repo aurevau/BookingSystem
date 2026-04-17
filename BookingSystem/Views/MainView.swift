@@ -9,8 +9,15 @@ import SwiftUI
 
 struct MainView: View {
     @Environment(AuthViewModel.self) private var viewModel
+    @State private var userViewModel =  UserViewModel()
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text("Hello")
+        
+        switch userViewModel.userRole {
+        case .guest: Text("Guest")
+        case .user: Text("User")
+        case .admin: Text("Admin")
+        }
         
         Button("Log Out") {
             viewModel.logOut()
