@@ -8,26 +8,26 @@
 import SwiftUI
 
 struct OnboardingView: View {
-    @State private var viewModel = RegisterViewModel()
-
-
+    @Environment(AuthViewModel.self) private var viewModel
+    
     var body: some View {
+        @Bindable var vm = viewModel
         NavigationStack {
             VStack(spacing: 20) {
             
-                    TextField("Username", text: $viewModel.name)
+                    TextField("Username", text: $vm.name)
                         .autocorrectionDisabled()
                         .textFieldStyle(DefaultTextFieldStyle())
                     
-                    TextField("Email", text: $viewModel.email)
+                    TextField("Email", text: $vm.email)
                         .textFieldStyle(DefaultTextFieldStyle())
                         .autocapitalization(.none)
                         .autocorrectionDisabled()
                     
-                    SecureField("Password", text: $viewModel.password)
+                    SecureField("Password", text: $vm.password)
                         .textFieldStyle(DefaultTextFieldStyle())
                     
-                    SecureField("Confirm Password", text: $viewModel.confirmPassword)
+                    SecureField("Confirm Password", text: $vm.confirmPassword)
                         .textFieldStyle(DefaultTextFieldStyle())
                     
                     if !viewModel.errorMessage.isEmpty {
@@ -35,12 +35,24 @@ struct OnboardingView: View {
                             .foregroundStyle(.red)
                         
                     }
+                
+                
+                if viewModel.registerState == .registerSuccess {
+                    Text("Registration was successfull")
+                        .foregroundColor(.green)
+                }
                     
                     Button {
                         viewModel.register()
                            
                     } label: {
-                        Text("Create Account")
+                        
+                        if viewModel.isLoading {
+                                ProgressView()
+                        } else {
+                            Text("Create Account")
+                        }
+                       
                     }
                     
                 
