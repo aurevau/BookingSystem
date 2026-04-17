@@ -41,9 +41,11 @@ extension Date {
         return dates
     }
     
-    func string() -> String {
+    func monthDayYearFormat() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MM/dd/yyyy"
         return formatter.string(from: self)
     }
+    
+    
 }
