@@ -7,9 +7,9 @@
 
 import Foundation
 
-enum LoginState {
-    case notLoggedIn
-    case loading
-    case loginSuccess
+enum RegisterState: Equatable {
+    case idle
+    case registerFailed
+    case registerSuccess
     case error(message: String)
 }
