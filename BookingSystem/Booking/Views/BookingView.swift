@@ -97,7 +97,7 @@ struct BookingView: View {
                                                     Circle()
                                                         .frame(width: 48, height: 48)
                                                         .foregroundColor(value.day % 2 != 0 ? .blue.opacity(0.1) : .clear)
-                                                    if value.date.string() == Date().string() {
+                                                    if value.date.monthDayYearFormat() == Date().monthDayYearFormat() {
                                                         Circle()
                                                             .frame(width: 8, height: 8)
                                                             .foregroundColor(value.day % 2 != 0 ? .blue : .gray)
