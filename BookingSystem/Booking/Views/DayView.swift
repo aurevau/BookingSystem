@@ -26,17 +26,46 @@ struct DayView: View {
                 
                 ForEach(viewModel.dates, id: \.self) {date in
                     
-                    Button {
-                        
-                    } label: {
-                        Text((date?.timeFromDate())!)
-                            .fontWeight(.bold)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke()
+                    HStack {
+                        Button {
+                            withAnimation {
+                                viewModel.selectedDate = date
+                            }
+                        } label: {
+                            Text((date?.timeFromDate())!)
+                                .fontWeight(.bold)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .foregroundColor(viewModel.selectedDate == date ? .white : .blue)
+                                .background(
+                                    ZStack {
+                                        if viewModel.selectedDate == date {
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .foregroundColor(.gray)
+                                        } else {
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke()
+                                        }
+                                    }
                                 )
+                        }
+                    
+                        if viewModel.selectedDate == date {
+                              
+                            NavigationLink{
+                                EmptyView()
+                            } label: {
+                                Text("Nästa")
+                                    .fontWeight(.bold)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .foregroundColor(.white)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .foregroundColor(.blue)
+                                    )
+                            }
+                        }
                     }
                 }
                 .padding(.horizontal)
