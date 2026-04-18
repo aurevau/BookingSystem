@@ -8,13 +8,9 @@
 import SwiftUI
 
 struct DayView: View {
-    @State private var dates = [
-        Date(),
-        Calendar.current.date(byAdding: .hour, value: 1, to: Date()),
-        Calendar.current.date(byAdding: .hour, value: 2, to: Date()),
-        Calendar.current.date(byAdding: .hour, value: 3, to: Date()),
-        Calendar.current.date(byAdding: .hour, value: 4, to: Date())
-    ]
+    
+    @State private var viewModel = DayViewModel()
+   
     var body: some View {
         ScrollView {
             VStack {
@@ -28,7 +24,7 @@ struct DayView: View {
                 
                 Text("Längd: 30 minuter")
                 
-                ForEach(dates, id: \.self) {date in
+                ForEach(viewModel.dates, id: \.self) {date in
                     
                     Button {
                         
