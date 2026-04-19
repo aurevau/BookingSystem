@@ -75,8 +75,8 @@ struct BookingView: View {
                 
                 Spacer()
                 
-                Button {
-                    
+                NavigationLink {
+                    EmptyView()
                 } label: {
                     Text("Boka inlämning")
                 }
