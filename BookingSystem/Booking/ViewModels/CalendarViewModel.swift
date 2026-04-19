@@ -9,7 +9,7 @@ import Observation
 import Foundation
 
 @Observable
-class BookingViewModel {
+class CalendarViewModel {
     var selectedMonth: Int = 0
     var selectedDate: Date {
         fetchSelectedMonth()

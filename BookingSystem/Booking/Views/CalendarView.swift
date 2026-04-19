@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct BookingView: View {
-    @State private var viewModel = BookingViewModel()
+struct CalendarView: View {
+    @State private var viewModel = CalendarViewModel()
     
     var body: some View {
         NavigationStack {
@@ -86,7 +86,8 @@ struct BookingView: View {
                            
                             ZStack {
                                 NavigationLink(destination: {
-                                    EmptyView()
+//                                    EmptyView()
+                                    DayView()
                                 }, label: {
                                     if value.day != -1 {
                                         Text("\(value.day)")
@@ -125,5 +126,5 @@ struct BookingView: View {
 }
 
 #Preview {
-    BookingView()
+    CalendarView()
 }
