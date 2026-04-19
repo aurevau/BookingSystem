@@ -53,7 +53,7 @@ struct DayView: View {
                         if viewModel.selectedDate == date {
                               
                             NavigationLink{
-                                EmptyView()
+                                BookingView()
                             } label: {
                                 Text("Nästa")
                                     .fontWeight(.bold)
