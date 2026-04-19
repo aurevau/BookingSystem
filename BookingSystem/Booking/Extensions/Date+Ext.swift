@@ -8,7 +8,7 @@
 import Foundation
 
 extension Date {
-    func monthAndYear() -> String {
+    func monthYearFormat() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM yyyy"
         
@@ -41,9 +41,17 @@ extension Date {
         return dates
     }
     
-    func string() -> String {
+    func monthDayYearFormat() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MM/dd/yyyy"
         return formatter.string(from: self)
     }
+    
+    func timeFromDate() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "hh:mm a"
+        return formatter.string(from: self)
+    }
+    
+    
 }

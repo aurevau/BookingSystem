@@ -2,119 +2,111 @@
 //  BookingView.swift
 //  BookingSystem
 //
-//  Created by Aurelie Vaudan APP25 on 2026-04-17.
+//  Created by Aurelie Vaudan APP25 on 2026-04-19.
 //
 
 import SwiftUI
 
 struct BookingView: View {
-    @State private var viewModel = BookingViewModel()
     
+    @State private var viewModel = BookingViewModel()
     var body: some View {
-        VStack {
-            Image("busungarna")
-                .resizable()
-                .scaledToFill()
-                .frame(width: 128, height: 128)
-                .cornerRadius(64)
-            
-            Text("Busungarna")
-                .font(.title)
-                .fontWeight(.bold)
-            
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(.gray)
-            
-            VStack(spacing: 20) {
-                Text("Välj en dag")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                
+        VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 20) {
                 HStack {
-                    Spacer()
+                    Image(systemName: "clock")
                     
-                    Button {
-                        withAnimation {
-                            viewModel.selectedMonth -= 1
-                        }
-                    } label: {
-                        Image(systemName: "lessthan")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 18, height: 18)
-                            .foregroundColor(.gray)
-                        
-                        
-                    }
-                    
-                    Spacer()
-                    
-                    Text(viewModel.selectedDate.monthAndYear())
-                        .font(.title2)
-                    
-                    Spacer()
-                    Button {
-                        withAnimation {
-                            viewModel.selectedMonth += 1
-                        }
-                    } label: {
-                        Image(systemName: "greaterthan")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 18, height: 18)
-                            .foregroundColor(.gray)
-                        
-                    }
-                    
-                    Spacer()
-                    
+                    Text("30 minuter")
                 }
                 
                 HStack {
-                    ForEach(viewModel.days, id: \.self) {day in
-                        Text(day)
-                            .font(.system(size: 12, weight: .medium))
-                            .frame(maxWidth: .infinity)
-                        
-                    }
+                    Image(systemName: "mappin")
+                    
+                    Text("Industrivägen 24, 135 40 Tyresö")
                 }
                 
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 20) {
-                    ForEach(viewModel.fetchDates()) {value in
-                       
-                        ZStack {
-                            if value.day != -1 {
-                                Text("\(value.day)")
-                                    .foregroundColor(value.day % 2 != 0 ? .blue : .black)
-                                    .fontWeight(value.day % 2 != 0 ? .bold : .none)
-                                    .background {
-                                        ZStack(alignment: .bottom) {
-                                            Circle()
-                                                .frame(width: 48, height: 48)
-                                                .foregroundColor(value.day % 2 != 0 ? .blue.opacity(0.1) : .clear)
-                                            if value.date.string() == Date().string() {
-                                                Circle()
-                                                    .frame(width: 8, height: 8)
-                                                    .foregroundColor(value.day % 2 != 0 ? .blue : .gray)
-                                            }
-                                        }
-                                    }
-                            } else {
-                                Text("")
-                            }
-                        }
-                        .frame(width: 32, height: 32)
-                     
-                    }
+                HStack {
+                    Image(systemName: "calendar")
+                    
+                    Text("Saturday 19 April 2026")
+                }
+                
+                HStack {
+                    Image(systemName: "creditcard")
+                    
+                    Text("Kostnadsfritt")
                 }
             }
             .padding()
+           
+            
+            Divider()
+       
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Skriv i dina uppgifter")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                   
+                
+                Text("Namn*")
+                
+                TextField("", text: $viewModel.name)
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke()
+                    )
+              
+                Text("Email*")
+                TextField("", text:  $viewModel.email)
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke()
+                    )
+                
+                Text("Vänligen dela med dig av allt som kan hjälpa förbereda oss inför din inlämning")
+                TextField("", text: $viewModel.notes, axis: .vertical )
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke()
+                    )
+                
+                Spacer()
+                
+                NavigationLink {
+                    ConfirmationView()
+                } label: {
+                    Text("Boka inlämning")
+                }
+                .padding()
+                .fontWeight(.bold)
+                .frame(maxWidth: .infinity)
+                .foregroundColor(.white)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                       
+                )
+               
+            
+            }
+            .font(.caption)
+            .fontWeight(.bold)
+            .padding()
+            .foregroundColor(.black)
+            
         }
-        .frame(maxHeight: .infinity, alignment: .top)
+       
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .navigationTitle("Busungarna inlämning")
+        .foregroundColor(Color(.systemGray))
     }
 }
 
 #Preview {
-    BookingView()
+    NavigationStack {
+        BookingView()
+    }
+    
 }
