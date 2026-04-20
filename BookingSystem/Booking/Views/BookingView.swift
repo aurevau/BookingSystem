@@ -81,7 +81,7 @@ struct BookingView: View {
                 Spacer()
                 
                 NavigationLink {
-                    ConfirmationView()
+                    ConfirmationView(currentDate: currentDate)
                 } label: {
                     Text("Boka inlämning")
                 }
