@@ -64,5 +64,13 @@ extension Date {
         return formatter.string(from: self)
     }
     
+    // Returns day of the week
+    func dayOfTheWeekFormat() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE"
+        formatter.locale = Locale(identifier: "sv_SE")
+        return formatter.string(from: self).capitalized
+    }
+    
     
 }
