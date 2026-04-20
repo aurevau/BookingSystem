@@ -10,13 +10,22 @@ import SwiftUI
 struct BookingView: View {
     
     @State private var viewModel = BookingViewModel()
+    
+    var currentDate: Date
     var body: some View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading, spacing: 20) {
+                
+                HStack {
+                    Image(systemName: "calendar")
+                    
+                    Text("\(currentDate.dayOfTheWeekFormat()) \(currentDate.fullMonthDayYearFormat())")
+                }
+                
                 HStack {
                     Image(systemName: "clock")
                     
-                    Text("30 minuter")
+                    Text(currentDate.bookingTimeIntervalFormat())
                 }
                 
                 HStack {
@@ -25,11 +34,7 @@ struct BookingView: View {
                     Text("Industrivägen 24, 135 40 Tyresö")
                 }
                 
-                HStack {
-                    Image(systemName: "calendar")
-                    
-                    Text("Saturday 19 April 2026")
-                }
+                
                 
                 HStack {
                     Image(systemName: "creditcard")
@@ -76,7 +81,7 @@ struct BookingView: View {
                 Spacer()
                 
                 NavigationLink {
-                    ConfirmationView()
+                    ConfirmationView(currentDate: currentDate)
                 } label: {
                     Text("Boka inlämning")
                 }
@@ -106,7 +111,7 @@ struct BookingView: View {
 
 #Preview {
     NavigationStack {
-        BookingView()
+        BookingView(currentDate: Date())
     }
     
 }
