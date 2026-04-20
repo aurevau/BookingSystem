@@ -8,12 +8,7 @@
 import Foundation
 
 extension Date {
-    func monthYearFormat() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM yyyy"
-        
-        return formatter.string(from: self)
-    }
+   
     func datesOfMonth() -> [Date] {
         let calendar = Calendar.current
         let currentMonth = calendar.component(.month, from: self)
@@ -41,6 +36,15 @@ extension Date {
         return dates
     }
     
+    // Returns date as ex: April 2026
+    func monthYearFormat() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM yyyy"
+        
+        return formatter.string(from: self)
+    }
+    
+    // Returns date as ex: 04/20/23
     func monthDayYearFormat() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MM/dd/yyyy"
@@ -50,6 +54,13 @@ extension Date {
     func timeFromDate() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "hh:mm a"
+        return formatter.string(from: self)
+    }
+    
+    // Returns dates as ex: April 20, 2026
+    func fullMonthDayYearFormat() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d MMMM, YYYY"
         return formatter.string(from: self)
     }
     
