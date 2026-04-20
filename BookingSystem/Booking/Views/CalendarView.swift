@@ -15,7 +15,7 @@ struct CalendarView: View {
             VStack {
                 Image("busungarna")
                     .resizable()
-                    .scaledToFill()
+                    .scaledToFit()
                     .frame(width: 128, height: 128)
                     .cornerRadius(64)
                 
@@ -40,10 +40,10 @@ struct CalendarView: View {
                                 viewModel.selectedMonth -= 1
                             }
                         } label: {
-                            Image(systemName: "lessthan")
+                            Image(systemName: "lessthan.circle.fill")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 18, height: 18)
+                                .frame(width: 24, height: 24)
                                 .foregroundColor(.gray)
                             
                             
@@ -60,10 +60,10 @@ struct CalendarView: View {
                                 viewModel.selectedMonth += 1
                             }
                         } label: {
-                            Image(systemName: "greaterthan")
+                            Image(systemName: "greaterthan.circle.fill")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 18, height: 18)
+                                .frame(width: 24, height: 24)
                                 .foregroundColor(.gray)
                             
                         }
@@ -87,7 +87,7 @@ struct CalendarView: View {
                             ZStack {
                                 NavigationLink(destination: {
 //                                    EmptyView()
-                                    DayView()
+                                    DayView(currentDate: value.date)
                                 }, label: {
                                     if value.day != -1 {
                                         Text("\(value.day)")
@@ -99,7 +99,7 @@ struct CalendarView: View {
                                                         .frame(width: 48, height: 48)
                                                         .foregroundColor(value.day % 2 != 0 ? .blue.opacity(0.1) : .clear)
                                                     if value.date.monthDayYearFormat() == Date().monthDayYearFormat() {
-                                                        Circle()
+                                                            Circle()
                                                             .frame(width: 8, height: 8)
                                                             .foregroundColor(value.day % 2 != 0 ? .blue : .gray)
                                                     }
