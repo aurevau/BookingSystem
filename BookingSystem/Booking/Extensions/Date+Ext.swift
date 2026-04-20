@@ -51,6 +51,7 @@ extension Date {
         return formatter.string(from: self)
     }
     
+    // Returns date as time 10:10
     func timeFromDate() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "hh:mm a"
@@ -70,6 +71,22 @@ extension Date {
         formatter.dateFormat = "EEEE"
         formatter.locale = Locale(identifier: "sv_SE")
         return formatter.string(from: self).capitalized
+    }
+    
+    // Returns a time block of 30 minutes, needs to be refactored?
+    func bookingTimeIntervalFormat() -> String {
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "hh:mm a"
+    
+        
+        let start = timeFormatter.string(from: self)
+        let endTime = Calendar.current.date(byAdding: .minute, value: 30, to: self)!
+        
+        let end = timeFormatter.string(from: endTime)
+        
+        
+        
+        return "\(start) - \(end)"
     }
     
     
