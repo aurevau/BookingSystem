@@ -10,11 +10,13 @@ import SwiftUI
 struct DayView: View {
     
     @State private var viewModel = DayViewModel()
+    
+    var currentDate: Date
    
     var body: some View {
         ScrollView {
             VStack {
-                Text("17 April 2026")
+//                Text(currentDate.fullMonthDayYearFormat())
                  
                 Divider()
                     .padding(.vertical)
@@ -71,14 +73,27 @@ struct DayView: View {
                 .padding(.horizontal)
             }
         }
-        .navigationTitle("Fredag")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                VStack(spacing: 4) {
+                    Text(currentDate.dayOfTheWeekFormat())
+                                  .font(.headline)
+                    
+                    Text(currentDate.fullMonthDayYearFormat())
+                                    .font(.subheadline)
+                                    .foregroundColor(.black.opacity(0.8))
+                }
+                .padding(.top)
+            }
+        }
+      
     }
 }
 
 #Preview {
     NavigationStack {
-        DayView()
+        DayView(currentDate: Date())
     }
    
 }
