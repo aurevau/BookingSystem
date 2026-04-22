@@ -10,7 +10,29 @@ import Foundation
 
 @Observable
 class CalendarViewModel {
+    
+    // Might put everything in bookingViewModel to be able to fetch all data connected to bookings for now
     var selectedMonth: Int = 0
+    var availableDates: Set<String> = [
+    ]
+    
+    private let repository = BookingRepository()
+
+    
+    func fetchAvailableDates(for month: Date) async {
+            do {
+                let slots = try await repository.fetchAvailableSlots(for: month)
+                availableDates = Set(slots.map { $0.start.monthDayYearFormat() })
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        
+        func hasAvailableSlots(for date: Date) -> Bool {
+            availableDates.contains(date.monthDayYearFormat())
+        }
+    
+    // Gammal kod
     var selectedDate: Date {
         fetchSelectedMonth()
     }
