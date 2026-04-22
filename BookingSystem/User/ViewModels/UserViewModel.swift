@@ -27,4 +27,14 @@ class UserViewModel {
             }
         }
     }
+    
+    func getUserDetails(userId: String) async -> User? {
+        do {
+            let snapshot = try await userRepo.getUserDetails(userId: userId)
+            return snapshot
+        } catch {
+            errorMessage = error.localizedDescription
+            return nil
+        }
+    }
 }
