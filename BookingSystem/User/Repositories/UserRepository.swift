@@ -38,4 +38,9 @@ class UserRepository {
         return document.userRole
         
     }
+    
+    func getUserDetails(userId: String) async throws -> User {
+        let snapshot = try await  db.collection("users").document(userId).getDocument()
+        return try snapshot.data(as: User.self)
+    }
 }
