@@ -9,10 +9,17 @@ import SwiftUI
 
 struct BookingView: View {
     
-    @State private var viewModel = BookingViewModel()
+    @Environment(BookingViewModel.self) private var viewModel
     
+    @State private var navigateToConfirmation = false
+
+
+    
+    
+
     var currentDate: Date
     var body: some View {
+        @Bindable var vm = viewModel
         VStack(alignment: .leading) {
             VStack(alignment: .leading, spacing: 20) {
                 
@@ -55,7 +62,7 @@ struct BookingView: View {
                 
                 Text("Namn*")
                 
-                TextField("", text: $viewModel.name)
+                TextField("", text: $vm.name)
                     .padding()
                     .background(
                         RoundedRectangle(cornerRadius: 10)
@@ -63,7 +70,7 @@ struct BookingView: View {
                     )
               
                 Text("Email*")
-                TextField("", text:  $viewModel.email)
+                TextField("", text:  $vm.email)
                     .padding()
                     .background(
                         RoundedRectangle(cornerRadius: 10)
@@ -71,7 +78,7 @@ struct BookingView: View {
                     )
                 
                 Text("Vänligen dela med dig av allt som kan hjälpa förbereda oss inför din inlämning")
-                TextField("", text: $viewModel.notes, axis: .vertical )
+                TextField("", text: $vm.notes, axis: .vertical )
                     .padding()
                     .background(
                         RoundedRectangle(cornerRadius: 10)
@@ -80,10 +87,16 @@ struct BookingView: View {
                 
                 Spacer()
                 
-                NavigationLink {
-                    ConfirmationView(currentDate: currentDate)
+                Button {
+                    Task {
+                        await viewModel.confirmBooking(slot: viewModel.selectedSlot, userId: viewModel.getUserId())
+                        navigateToConfirmation = true
+                    }
                 } label: {
                     Text("Boka inlämning")
+                }
+                .navigationDestination(isPresented: $navigateToConfirmation) {
+                    ConfirmationView(currentDate: currentDate)
                 }
                 .padding()
                 .fontWeight(.bold)
@@ -112,6 +125,7 @@ struct BookingView: View {
 #Preview {
     NavigationStack {
         BookingView(currentDate: Date())
+            .environment(BookingViewModel())
     }
     
 }

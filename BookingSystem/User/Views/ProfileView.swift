@@ -8,11 +8,54 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @Environment(AuthViewModel.self) private var authViewModel
+    @Environment(BookingViewModel.self) private var bookingViewModel
+    
+    @State private var userViewModel = UserViewModel()
+    
+    @State private var user: User?
+    
+    @State private var showSettings = false
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            
+            if let user = user {
+                Text(user.name)
+                
+                Text(user.email)
+            }
+        }
+        .environment(authViewModel)
+        .task {
+            if let userId = bookingViewModel.getUserId()
+            {
+                
+                user = await userViewModel.getUserDetails(userId: userId)
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                
+                Button {
+                    showSettings = true
+                } label: {
+                    Image(systemName: "gearshape.fill")
+                }
+            }
+        }
+        .navigationDestination(isPresented: $showSettings){
+                   SettingsView()
+            }
     }
 }
 
 #Preview {
-    ProfileView()
+    NavigationStack {
+        ProfileView()
+            .environment(BookingViewModel())
+            
+    }
+  
+       
+      
 }

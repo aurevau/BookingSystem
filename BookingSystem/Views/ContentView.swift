@@ -14,7 +14,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
             switch viewModel.loginState {
-            case .loginSuccess: MainView()
+            case .loginSuccess: CalendarView()
             case .notLoggedIn : LoginView()
             case .idle : ProgressView()
             case .error(message: _):

@@ -9,6 +9,10 @@ import SwiftUI
 
 struct ConfirmationView: View {
     
+    @Environment(BookingViewModel.self) private var viewModel
+    
+    @State private var isCancelled = false
+    
     var currentDate: Date
     var body: some View {
         VStack {
@@ -19,11 +23,11 @@ struct ConfirmationView: View {
                 .frame(width: 120, height: 120)
                 .padding()
             
-            Text("Bekräftad!")
+            Text(isCancelled ? "Avbokad!" : " Bekräftad!")
                 .font(.title3)
                 .fontWeight(.bold)
                 
-            Text("Du har en schamalagd inlämning på Busungarna")
+            Text(isCancelled ? "Din tid är avbokad!" : "Du har en schamalagd inlämning på Busungarna")
                 .font(.caption)
                 .fontWeight(.semibold)
                 .foregroundColor(.black.opacity(0.9))
@@ -41,6 +45,13 @@ struct ConfirmationView: View {
             
             
         }
+        .onAppear {
+            Task {
+                if let userId = viewModel.getUserId() {
+                    await viewModel.fetchMyBookings(userId: userId)
+                }
+            }
+        }
         .padding()
         
         VStack(alignment: .leading, spacing: 20) {
@@ -48,9 +59,9 @@ struct ConfirmationView: View {
             HStack {
                 Circle()
                     .frame(width: 16, height: 16)
-                    .foregroundColor(.green)
+                    .foregroundColor(isCancelled ? .red : .green)
                 
-                Text("Inlämning Busungarna, 30 min")
+                Text(isCancelled ?  "Avbokad" : "Inlämning Busungarna, 30 min")
                     .fontWeight(.bold)
                
             }
@@ -81,7 +92,7 @@ struct ConfirmationView: View {
             Spacer()
             
             NavigationLink {
-                MainView()
+                CalendarView()
             } label: {
                 Text("Klar")
                     .fontWeight(.bold)
@@ -92,6 +103,27 @@ struct ConfirmationView: View {
                         .foregroundColor(.black))
                         
             }
+            
+            if let booking = viewModel.getMyBooking(for: currentDate) {
+                Button {
+                    Task{
+                        if let userId = viewModel.getUserId() {
+                            await viewModel.cancelBooking(slot: booking, userId: userId)
+                            isCancelled = true
+                        }
+                    }
+                } label: {
+                    Text("Avboka")
+                        .fontWeight(.bold)
+                        .padding()
+                        .foregroundColor(.red)
+                        .frame(maxWidth: .infinity)
+                        .background(RoundedRectangle(cornerRadius: 10)
+                            .stroke()
+                            .foregroundColor(.red))
+                }
+            }
+            
             
         }
         .frame(maxWidth: .infinity, alignment: .topLeading)
@@ -105,6 +137,7 @@ struct ConfirmationView: View {
 #Preview {
     NavigationStack {
         ConfirmationView(currentDate: Date())
+            .environment(BookingViewModel())
 
     }
 }

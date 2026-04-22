@@ -8,10 +8,28 @@
 import SwiftUI
 
 struct CalendarView: View {
-    @State private var viewModel = CalendarViewModel()
+    @State private var viewModel = BookingViewModel()
+    @Environment(AuthViewModel.self) private var authViewModel
     
     var body: some View {
         NavigationStack {
+            VStack(alignment: .trailing) {
+                NavigationLink {
+                    ProfileView()
+                        .environment(authViewModel)
+                } label: {
+                    Image(systemName: "person.circle")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 40, height: 40)
+                        .cornerRadius(64)
+                        .foregroundColor(.pink.opacity(0.4))
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .topTrailing)
+            .padding(.trailing)
+           
+            
             VStack {
                 Image("busungarna")
                     .resizable()
@@ -51,7 +69,7 @@ struct CalendarView: View {
                         
                         Spacer()
                         
-                        Text(viewModel.selectedDate.monthYearFormat())
+                        Text(viewModel.selectedMonthDate.monthYearFormat())
                             .font(.title2)
                         
                         Spacer()
@@ -85,43 +103,81 @@ struct CalendarView: View {
                         ForEach(viewModel.fetchDates()) {value in
                            
                             ZStack {
-                                NavigationLink(destination: {
-//                                    EmptyView()
-                                    DayView(currentDate: value.date)
-                                }, label: {
-                                    if value.day != -1 {
-                                        Text("\(value.day)")
-                                            .foregroundColor(value.day % 2 != 0 ? .blue : .black)
-                                            .fontWeight(value.day % 2 != 0 ? .bold : .none)
-                                            .background {
-                                                ZStack(alignment: .bottom) {
-                                                    Circle()
-                                                        .frame(width: 48, height: 48)
-                                                        .foregroundColor(value.day % 2 != 0 ? .blue.opacity(0.1) : .clear)
-                                                    if value.date.monthDayYearFormat() == Date().monthDayYearFormat() {
-                                                            Circle()
-                                                            .frame(width: 8, height: 8)
-                                                            .foregroundColor(value.day % 2 != 0 ? .blue : .gray)
-                                                    }
-                                                }
-                                            }
-                                            
-                                    } else {
-                                        Text("")
+                                if let booking = viewModel.getMyBooking(for: value.date) {
+                                    NavigationLink {
+                                        ConfirmationView(currentDate: booking.start)
+                                    } label: {
+                                        dayLabel(for: value, isBooked: true)
                                     }
-                                })
-                                .disabled(value.day % 2 == 0)
+                                } else {
+                                    NavigationLink {
+                                        DayView(currentDate: value.date)
+                                            .environment(viewModel)
+                                    } label: {
+                                        dayLabel(for: value, isBooked: false)
+                                    }
+                                    .disabled(!viewModel.hasAvailableSlots(for: value.date))
+                                }
                             }
                             .frame(width: 32, height: 32)
+                            
                          
                         }
                     }
                 }
                 .padding()
+                .onAppear {
+                    Task {
+                        await viewModel.fetchAvailableDates(for: viewModel.selectedMonthDate)
+                        if let userId = viewModel.getUserId() {
+                                    await viewModel.fetchMyBookings(userId: userId)
+                                }
+                        
+                        
+                    }
+                }
+                .onChange(of: viewModel.selectedMonth) {
+                    Task {
+                        await viewModel.fetchAvailableDates(for: viewModel.selectedMonthDate)
+                        if let userId = viewModel.getUserId() {
+                                    await viewModel.fetchMyBookings(userId: userId)
+                                }
+                    }
+                }
             }
             .frame(maxHeight: .infinity, alignment: .top)
         }
+        .environment(viewModel)
         
+    }
+    
+    @ViewBuilder
+    func dayLabel(for value: CalendarDate, isBooked: Bool) -> some View {
+        if value.day != -1 {
+            Text("\(value.day)")
+                .foregroundColor(isBooked ? .green : (viewModel.hasAvailableSlots(for: value.date) ? .blue : .black))
+                .fontWeight(isBooked || viewModel.hasAvailableSlots(for: value.date) ? .bold : .none)
+                .background {
+                    ZStack(alignment: .bottom) {
+                        Circle()
+                            .frame(width: 48, height: 48)
+                            .foregroundColor(isBooked ? .green.opacity(0.1) : (viewModel.hasAvailableSlots(for: value.date) ? .blue.opacity(0.1) : .clear))
+                        if value.date.monthDayYearFormat() == Date().monthDayYearFormat() {
+                            Circle()
+                                .frame(width: 8, height: 8)
+                                .foregroundColor(.gray)
+                        }
+                        if isBooked {
+                            Circle()
+                                .frame(width: 8, height: 8)
+                                .foregroundColor(.green)
+                                .offset(y: 4)
+                        }
+                    }
+                }
+        } else {
+            Text("")
+        }
     }
 }
 

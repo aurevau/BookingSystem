@@ -41,7 +41,7 @@ class AuthViewModel {
                 let userId = result.user.uid
                 print("\(userId) is logged in")
                 loginState = .loginSuccess
-                clearLoginFields()
+//                clearLoginFields()
                 isLoading = false
             } catch {
                 isLoading = false
@@ -97,13 +97,15 @@ class AuthViewModel {
                 let userId = result.user.uid
                 registerState = .registerSuccess
                 
-                try await Task.sleep(for: .seconds(1))
-                loginState = .loginSuccess
+             
                 
                 print("\(userId) is registered to firebase ")
                 try await userRepo.saveUserToFirebase(accountNumber: accountNumber, email: email, name: name)
                 
-                clearRegisterFields()
+                
+                try await Task.sleep(for: .seconds(1))
+                loginState = .loginSuccess
+//                clearRegisterFields()
                 
             } catch {
                 isLoading = false

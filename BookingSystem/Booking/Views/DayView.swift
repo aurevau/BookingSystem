@@ -1,4 +1,3 @@
-//
 //  DayView.swift
 //  BookingSystem
 //
@@ -8,40 +7,42 @@
 import SwiftUI
 
 struct DayView: View {
+
+//    @State private var viewModel = DayViewModel()
     
-    @State private var viewModel = DayViewModel()
-    
+    @Environment(BookingViewModel.self) private var viewModel
+
     var currentDate: Date
-   
+
     var body: some View {
         ScrollView {
             VStack {
 //                Text(currentDate.fullMonthDayYearFormat())
-                 
+
                 Divider()
                     .padding(.vertical)
                 Text("Välj en tid")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                
+
                 Text("Längd: 30 minuter")
-                
-                ForEach(viewModel.dates, id: \.self) {date in
-                    
+
+                ForEach(viewModel.slots, id: \.self) { slot in
+
                     HStack {
                         Button {
                             withAnimation {
-                                viewModel.selectedDate = date
+                                viewModel.selectedSlot = slot
                             }
                         } label: {
-                            Text((date?.timeFromDate())!)
+                            Text((slot.start.timeFromDate()))
                                 .fontWeight(.bold)
                                 .padding()
                                 .frame(maxWidth: .infinity)
-                                .foregroundColor(viewModel.selectedDate == date ? .white : .blue)
+                                .foregroundColor(viewModel.selectedSlot?.id == slot.id ? .white : .blue)
                                 .background(
                                     ZStack {
-                                        if viewModel.selectedDate == date {
+                                        if viewModel.selectedSlot?.id == slot.id {
                                             RoundedRectangle(cornerRadius: 10)
                                                 .foregroundColor(.gray)
                                         } else {
@@ -51,11 +52,11 @@ struct DayView: View {
                                     }
                                 )
                         }
-                    
-                        if viewModel.selectedDate == date {
-                              
+
+                        if viewModel.selectedSlot?.id == slot.id {
+
                             NavigationLink{
-                                BookingView(currentDate: viewModel.selectedDate!)
+                                BookingView(currentDate: slot.start)
                             } label: {
                                 Text("Nästa")
                                     .fontWeight(.bold)
@@ -73,13 +74,18 @@ struct DayView: View {
                 .padding(.horizontal)
             }
         }
+        .onAppear {
+            Task {
+                await viewModel.fetchAvailableSlots(for: currentDate)
+            }
+        }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
                 VStack(spacing: 4) {
                     Text(currentDate.dayOfTheWeekFormat())
                                   .font(.headline)
-                    
+
                     Text(currentDate.fullMonthDayYearFormat())
                                     .font(.subheadline)
                                     .foregroundColor(.black.opacity(0.8))
@@ -87,13 +93,14 @@ struct DayView: View {
                 .padding(.top)
             }
         }
-      
+
     }
 }
 
 #Preview {
     NavigationStack {
         DayView(currentDate: Date())
+            .environment(BookingViewModel())
     }
-   
+
 }

@@ -10,12 +10,12 @@ import Foundation
 
 @Observable
 class DayViewModel {
-    var dates = [
+    var dates: [Date] = [
         Date(),
-        Calendar.current.date(byAdding: .hour, value: 1, to: Date()),
-        Calendar.current.date(byAdding: .hour, value: 2, to: Date()),
-        Calendar.current.date(byAdding: .hour, value: 3, to: Date()),
-        Calendar.current.date(byAdding: .hour, value: 4, to: Date())
+        Calendar.current.date(byAdding: .hour, value: 1, to: Date())!,
+        Calendar.current.date(byAdding: .hour, value: 2, to: Date())!,
+        Calendar.current.date(byAdding: .hour, value: 3, to: Date())!,
+        Calendar.current.date(byAdding: .hour, value: 4, to: Date())!
     ]
     var selectedDate: Date?
 }
