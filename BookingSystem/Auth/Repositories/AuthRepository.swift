@@ -24,4 +24,8 @@ class AuthRepository {
     var isSignedIn: Bool {
         return Auth.auth().currentUser != nil
     }
+    
+    var userId: String? {
+        Auth.auth().currentUser?.uid
+    }
 }
