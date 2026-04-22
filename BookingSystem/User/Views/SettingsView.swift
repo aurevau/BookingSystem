@@ -8,11 +8,31 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(AuthViewModel.self) private var viewModel
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            
+            Spacer()
+            
+            
+            
+            
+            Divider()
+            Button {
+                viewModel.logOut()
+            } label: {
+                Text("Log out")
+                    .foregroundColor(.red)
+            }
+            
+        }
+        .navigationTitle("Settings")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 #Preview {
     SettingsView()
+        .environment(AuthViewModel())
 }
